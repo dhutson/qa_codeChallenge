@@ -39,4 +39,48 @@ describe("Employee Manager", () => {
       title: "Grand Poobah",
     });
   });
+
+  describe("New tests for code challenge 3", () => {
+    it("can add new employee", async () => {
+      await em.addEmployee();
+      await em.selectEmployeeByName("New Employee");
+      await em.editEmployee({
+        name: "Dani Hutson",
+        phone: "4025559584",
+        title: "QA Engineer",
+    });
+    await em.saveChanges();
+    await em.selectEmployeeByName("Dollie Berry");
+    await em.selectEmployeeByName("Dani Hutson");
+    let employee = await em.getEmployeeInfo();
+    expect(employee.name).toEqual("Dani Hutson");
+    expect(employee.phone).toEqual("4025559584");
+    expect(employee.title).toEqual("QA Engineer");
+  });
+  it("can cancel edit", async () => {
+    await em.selectEmployeeByName("Bernice Ortiz");
+    await em.editEmployee({ title: "Grand Poobah" });
+    await em.cancelChanges();
+    let employee = await em.getEmployeeInfo();
+    expect(employee).toEqual({
+      id: 1,
+      name: "Bernice Ortiz",
+      phone: "4824931093",
+      title: "CEO",
+    });
+  });
+  it("Can edit and then navigate away; changes are not saved", async () => {
+    await em.selectEmployeeByName("Bernice Ortiz");
+    await em.editEmployee({ title: "Grand Poobah" });
+    await em.selectEmployeeByName("Phillip Weaver");
+    await em.selectEmployeeByName("Bernice Ortiz");
+    let employee = await em.getEmployeeInfo();
+    expect(employee).toEqual({
+      id: 1,
+      name: "Bernice Ortiz",
+      phone: "4824931093",
+      title: "CEO",
+    });
+   });
+  });
 });

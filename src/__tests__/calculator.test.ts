@@ -24,4 +24,25 @@ let dataset = [
   { x: 81, y: 227, method: "divide" },
 ];
 
-describe("Calculator", () => {});
+describe("Calculator", () => {
+  dataset.forEach((operation) => {
+    test(`the ${operation.method} method with ${operation.x} and ${operation.y}`, () => {
+      switch (operation.method) {
+        case "add":
+          expect(calculator.add(operation.x, operation.y)).toEqual(operation.x + operation.y);
+          break;
+        case "subtract":
+          expect(calculator.subtract(operation.x, operation.y)).toEqual(operation.x - operation.y);
+          break;
+        case "multiply":
+          expect(calculator.multiply(operation.x, operation.y)).toEqual(operation.x * operation.y);
+          break;
+        case "divide":
+          expect(calculator.divide(operation.x, operation.y)).toEqual(operation.x / operation.y);
+          break;
+        default:
+          console.log("There is no valid operation selected.")
+      }
+    });
+  });
+});
